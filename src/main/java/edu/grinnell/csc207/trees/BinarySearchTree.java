@@ -1,5 +1,6 @@
 package edu.grinnell.csc207.trees;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,22 +85,67 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
      * @return the elements of this tree collected via an in-order traversal
      */
     public List<T> toListInorder() {
-        throw new UnsupportedOperationException();
+        List<T> elements = new ArrayList<T>();
+        if (root == null) {
+            return elements;
+        }
+        return toListInorderH(root, elements);
     }
+
+    public List<T> toListInorderH(Node<T> root, List<T> elements) {
+        if (root.left != null) {
+            toListInorderH(root.left, elements);
+        }
+        elements.add(root.value);
+        if (root.right != null) {
+            toListInorderH(root.right, elements);
+        }
+        return elements;
+    } 
 
     /**
      * @return the elements of this tree collected via a pre-order traversal
      */
     public List<T> toListPreorder() {
-        throw new UnsupportedOperationException();
+        List<T> elements = new ArrayList<T>();
+        if (root == null) {
+            return elements;
+        }
+        return toListPreorderH(root, elements);
     }
+
+    public List<T> toListPreorderH(Node<T> root, List<T> elements) {
+        elements.add(root.value);
+        if (root.left != null) {
+            toListPreorderH(root.left, elements);
+        }
+        if (root.right != null) {
+            toListPreorderH(root.right, elements);
+        }
+        return elements;
+    } 
 
     /**
      * @return the elements of this tree collected via a post-order traversal
      */
     public List<T> toListPostorder() {
-        throw new UnsupportedOperationException();
+        List<T> elements = new ArrayList<T>();
+        if (root == null) {
+            return elements;
+        }
+        return toListPostorderH(root, elements);
     }
+
+    public List<T> toListPostorderH(Node<T> root, List<T> elements) {
+        if (root.left != null) {
+            toListPostorderH(root.left, elements);
+        }
+        if (root.right != null) {
+            toListPostorderH(root.right, elements);
+        }
+        elements.add(root.value);
+        return elements;
+    } 
 
     ///// Part 2: Contains
 
@@ -108,7 +154,22 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
      * @return true iff the tree contains <code>value</code>
      */
     public boolean contains(T value) {
-        throw new UnsupportedOperationException();
+        return containsH(value, root);
+    }
+
+    private boolean containsH(T value, Node<T> root) {
+        if (root == null) {
+            return false;
+        }
+        int comparison = root.value.compareTo(value);
+        if (comparison == 0) {
+            return true;
+        }
+        if (comparison < 0) {
+            return containsH(value, root.left);
+        } else {
+            return containsH(value, root.right);
+        }
     }
 
     ///// Part 3: Pretty Printing
@@ -118,7 +179,17 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
      *         form: "[v0, v1, ..., vn]"
      */
     public String toStringPreorder() {
-        throw new UnsupportedOperationException();
+        List<T> elements = toListPreorder();
+        StringBuffer buf = new StringBuffer("[");
+        T object = elements.get(0);
+        buf.append(object.toString());
+        for (int i = 1; i < elements.size(); i++) {
+            object = elements.get(i);
+            buf.append(", ");
+            buf.append(object.toString());
+        }
+        buf.append("]");
+        return buf.toString();
     }
 
     ///// Part 4: Deletion

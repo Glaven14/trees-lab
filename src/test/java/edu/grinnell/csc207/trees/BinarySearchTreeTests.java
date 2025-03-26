@@ -19,6 +19,15 @@ public class BinarySearchTreeTests {
         return tree;
     }
 
+    private BinarySearchTree<Integer> makeNoLeftTree() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<Integer>();
+        tree.insert(5);
+        tree.insert(7);
+        tree.insert(11);
+        tree.insert(16);
+        return tree;
+    }
+
     @Test
     public void emptyTreeTest() {
         BinarySearchTree<Integer> tree = new BinarySearchTree<Integer>();
@@ -40,15 +49,33 @@ public class BinarySearchTreeTests {
     }
 
     @Test
+    public void noLeftToListInorderTest() {
+        assertArrayEquals((Object[]) new Integer[] {5, 7, 11, 16},
+                          makeNoLeftTree().toListInorder().toArray());
+    }
+
+    @Test
     public void basicToListPreorderTest() {
         assertArrayEquals((Object[]) new Integer[] {5, 0, 7, 6, 11},
                           makeSampleTree().toListPreorder().toArray());
     }
 
     @Test
+    public void noLeftToListPreorderTest() {
+        assertArrayEquals((Object[]) new Integer[] {5, 7, 11, 16},
+                          makeNoLeftTree().toListPreorder().toArray());
+    }
+
+    @Test
     public void basicToListPostorderTest() {
         assertArrayEquals((Object[]) new Integer[] {0, 6, 11, 7, 5},
                           makeSampleTree().toListPostorder().toArray());
+    }
+
+    @Test
+    public void noLeftToListPostorderTest() {
+        assertArrayEquals((Object[]) new Integer[] {16, 11, 7, 5},
+                          makeNoLeftTree().toListPostorder().toArray());
     }
 
     @Test
