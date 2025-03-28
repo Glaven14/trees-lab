@@ -196,9 +196,9 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
   
     /*
      * The three cases of deletion are:
-     * 1. (TODO: fill me in!)
-     * 2. (TODO: fill me in!)
-     * 3. (TOOD: fill me in!)
+     * 1. The left subtree doesn't have any more children so we make the left subtree the new root
+     * 2. The right subtree doesn't have any more children so we make the right subtree the new root
+     * 3. Both subtrees have children so we can replace the root with the rightmost value in the left subtree (leftmost value in the right subtree)
      */
 
     /**
@@ -208,6 +208,59 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
      * @param value the value to delete
      */
     public void delete(T value) {
-        throw new UnsupportedOperationException();
+        if (!contains(value)) {
+            throw new IllegalArgumentException();
+        }
+        
+        Node<T> del = findNode(value, root, root.left);
+        if (del == null) {
+            del = findNode(value, root, root.right);
+        }
+        if (del == null) {
+            root = null;
+        }
+        if (sizeH(del.left) == 1) {
+            del.left = null;
+        } else if (sizeH(del.right) == 1) {
+            del.right = null;
+        }
+
+        deleteH(del);
+    }
+
+    private void deleteH(Node<T> root) {
+        if (sizeH(root.left) == 1) {
+            root.value = root.left.value;
+            root.left = null;
+        } else if (sizeH(root.right) == 1) {
+            root.value = root.right.value;
+            root.right = null;
+        } else {
+            Node<T> repl = findRightmost(root.left);
+            root.value = repl.value;
+            deleteH(repl);
+        }
+    }
+
+    private Node<T> findRightmost (Node<T> root) {
+        if (root.right != null) {
+            return findRightmost(root.right);
+        } else {
+            return root;
+        }
+    }
+    private Node<T> findNode(T value, Node<T> parent, Node<T> cur) {
+        if (cur == null) {
+            return null;
+        }
+        int comparison = cur.value.compareTo(value);
+        if (comparison == 0) {
+            return parent;
+        }
+        if (comparison < 0) {
+            return findNode(value, cur, cur.left);
+        } else {
+            return findNode(value, cur, cur.right);
+        }
     }
 }
